@@ -9,5 +9,8 @@ public class RemoteBluetoothServer{
             Thread waitThread = new Thread(new WaitThread());
             waitThread.start();
         }
+        
+        public void sendStopsignal(){
+        }
 	
 }
