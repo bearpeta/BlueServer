@@ -10,7 +10,7 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 import javax.microedition.io.StreamConnectionNotifier;
 
-public class RemoteBluetoothServer extends Observable implements ISender, Runnable{
+public class RemoteBluetoothServer extends Observable implements IChangeState, Runnable{
     private StreamConnection connection;
     
     private boolean isConnected;
@@ -19,13 +19,11 @@ public class RemoteBluetoothServer extends Observable implements ISender, Runnab
         isConnected = false;
     }
     
-    @Override
     public void sendStopSignal() {
-        Thread sendThread = new Thread(new SendThread(connection));
+        Thread sendThread = new Thread(new SendThread(connection, this));
         sendThread.start();
     }
     
-    @Override
     public void sendMessage(String message){
         Thread sendThread = new Thread(new SendThread(connection, message));
         sendThread.start();
@@ -42,7 +40,6 @@ public class RemoteBluetoothServer extends Observable implements ISender, Runnab
     private void waitForConnection() {
         // retrieve the local Bluetooth device object
         LocalDevice local = null;
-
         StreamConnectionNotifier notifier;
 
         // setup the server to listen for connection
@@ -69,8 +66,7 @@ public class RemoteBluetoothServer extends Observable implements ISender, Runnab
             try {
                 System.out.println("waiting for connection...");
                 connection = notifier.acceptAndOpen();
-
-                Thread receiveThread = new Thread(new ReceiveThread(connection));
+                Thread receiveThread = new Thread(new ReceiveThread(connection, this));
                 receiveThread.start();
 
             } catch (Exception e) {
@@ -80,6 +76,7 @@ public class RemoteBluetoothServer extends Observable implements ISender, Runnab
         }
     }
     
+    @Override
     public void changeConnectionState(boolean connectionState) {
       // if value has changed notify observers
       if(isConnected != connectionState) {

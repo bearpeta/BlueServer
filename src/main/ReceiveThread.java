@@ -7,13 +7,15 @@ import javax.microedition.io.StreamConnection;
 public class ReceiveThread implements Runnable {
 
     private StreamConnection mConnection;
+    private IChangeState stateChanger;
 
     // Constant that indicate command from devices
     private static final int EXIT_CMD = -1;
     private static final int START_ACTION = 1;
 
-    public ReceiveThread(StreamConnection connection) {
+    public ReceiveThread(StreamConnection connection, IChangeState stateChanger) {
         mConnection = connection;
+        this.stateChanger = stateChanger;
     }
 
     @Override
@@ -30,10 +32,12 @@ public class ReceiveThread implements Runnable {
 
                 if (command == EXIT_CMD) {
                     System.out.println("finish process");
+                    stateChanger.changeConnectionState(false);
                     break;
                 }
 
                 processCommand(command);
+                
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -48,6 +52,7 @@ public class ReceiveThread implements Runnable {
     private void processCommand(int command) {
         try {
             if (command == START_ACTION) {
+                stateChanger.changeConnectionState(true);
                 System.out.println("Start Shooting");
             }
 

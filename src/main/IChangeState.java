@@ -9,8 +9,7 @@ package main;
  *
  * @author Alessandro
  */
-public interface ISender {
-    public void sendStopSignal();
+public interface IChangeState {
     
-    public void sendMessage(String message);
+    public void changeConnectionState(boolean state);
 }

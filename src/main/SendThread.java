@@ -15,10 +15,12 @@ public class SendThread implements Runnable {
     private static final int EXIT_CMD = -1;
     
     private final String logMessage;
+    private IChangeState stateChanger;
 
-    public SendThread(StreamConnection connection) {
+    public SendThread(StreamConnection connection, IChangeState stateChanger) {
         mConnection = connection;
         logMessage = "";
+        this.stateChanger = stateChanger;
     }
     
     public SendThread(StreamConnection connection, String message) {
@@ -37,6 +39,8 @@ public class SendThread implements Runnable {
             if("".equals(logMessage)) {
                 outputStream.write(EXIT_CMD);
                 System.out.println("Stopsignal sended");
+                stateChanger.changeConnectionState(false);
+                mConnection.close();
             }
             else {
                 outputStream.write(logMessage.getBytes());
