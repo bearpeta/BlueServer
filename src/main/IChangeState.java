@@ -12,4 +12,6 @@ package main;
 public interface IChangeState {
     
     public void changeConnectionState(boolean state);
+    
+    public void addTextToArea(String message);
 }

@@ -26,12 +26,14 @@ public class ReceiveThread implements Runnable {
             InputStream inputStream = mConnection.openInputStream();
 
             System.out.println("waiting for input");
+            stateChanger.addTextToArea("waiting for input");
 
             while (true) {
                 int command = inputStream.read();
 
                 if (command == EXIT_CMD) {
                     System.out.println("finish process");
+                    stateChanger.addTextToArea("finish process");
                     stateChanger.changeConnectionState(false);
                     break;
                 }
@@ -54,6 +56,7 @@ public class ReceiveThread implements Runnable {
             if (command == START_ACTION) {
                 stateChanger.changeConnectionState(true);
                 System.out.println("Start Shooting");
+                stateChanger.addTextToArea("Start Shooting");
             }
 
         } catch (Exception e) {

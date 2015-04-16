@@ -18,7 +18,7 @@ public class GUI extends javax.swing.JFrame {
      */
     public GUI() {
         initComponents();
-        server = new RemoteBluetoothServer();
+        server = new RemoteBluetoothServer(textArea_log);
     }
 
     /**

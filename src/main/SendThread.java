@@ -36,15 +36,19 @@ public class SendThread implements Runnable {
             OutputStream outputStream = mConnection.openOutputStream();
 
             System.out.println("ready for output");
+            stateChanger.addTextToArea("ready for output");
+            
             if("".equals(logMessage)) {
                 outputStream.write(EXIT_CMD);
                 System.out.println("Stopsignal sended");
+                stateChanger.addTextToArea("Stopsignal sended");
                 stateChanger.changeConnectionState(false);
                 mConnection.close();
             }
             else {
                 outputStream.write(logMessage.getBytes());
                 System.out.println("Logmessage sended");
+                stateChanger.addTextToArea("Logmessage sended");
             }
             
         } catch (Exception e) {
